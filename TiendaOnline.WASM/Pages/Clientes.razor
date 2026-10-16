@@ -1,0 +1,85 @@
+﻿@page "/clientes"
+@inject HttpClient Http
+
+<PageTitle>Clientes</PageTitle>
+
+<h1>Clientes registrados</h1>
+
+<h3>Registrar cliente</h3>
+
+<div class="mb-3">
+    <label>Nombre:</label>
+    <input class="form-control" @bind="nuevoCliente.Nombre" />
+</div>
+
+<div class="mb-3">
+    <label>Correo:</label>
+    <input class="form-control" type="email" @bind="nuevoCliente.Email" />
+</div>
+
+<button class="btn btn-primary" @onclick="GuardarCliente">
+    Guardar cliente
+</button>
+
+<hr />
+
+@if (clientes == null)
+{
+    <p>Cargando clientes...</p>
+}
+else if (clientes.Count == 0)
+{
+    <p>No hay clientes registrados.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cliente in clientes)
+            {
+                <tr>
+                    <td>@cliente.Nombre</td>
+                    <td>@cliente.Email</td>
+                    <td>@cliente.Telefono</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Cliente>? clientes;
+    private Cliente nuevoCliente = new Cliente();
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = await Http.GetFromJsonAsync<List<Cliente>>("api/Clientes");
+    }
+
+    private async Task GuardarCliente()
+    {
+        var respuesta = await Http.PostAsJsonAsync("api/Clientes", nuevoCliente);
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            nuevoCliente = new Cliente();
+
+            clientes = await Http.GetFromJsonAsync<List<Cliente>>("api/Clientes");
+        }
+    }
+
+    public class Cliente
+    {
+        public int IdCliente { get; set; }
+        public string Nombre { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string? Telefono { get; set; }
+    }
+}

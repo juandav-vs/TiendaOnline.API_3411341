@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TiendaOnline.API/TiendaOnline.API.csproj" />
+  <Project Path="TiendaOnline.WASM/TiendaOnline.WASM.csproj" />
+</Solution>

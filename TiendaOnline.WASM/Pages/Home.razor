@@ -1,0 +1,21 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+
+<PageTitle>TiendaOnline</PageTitle>
+
+<div class="inicio">
+    <h1>Bienvenido a TiendaOnline</h1>
+
+    <p>Encuentra tus productos favoritos en un solo lugar.</p>
+
+    <button class="btn-tienda" @onclick="VerClientes">
+        Ver clientes
+    </button>
+</div>
+
+@code {
+    private void VerClientes()
+    {
+        Navigation.NavigateTo("/clientes");
+    }
+}
